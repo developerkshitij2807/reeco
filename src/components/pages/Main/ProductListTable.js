@@ -13,6 +13,7 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import { productDetails } from "src/constants";
+import ProductEditModal from "src/components/pages/Main/ProductEditModal";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -30,11 +31,13 @@ const headers = [
   "Price",
   "Quantity",
   "Total",
+  "",
   "Status",
 ];
 
 const ProductListTable = () => {
   const [productItems, setProductItems] = useState(productDetails);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const handleCheckButtonClick = (e, id) => {
     e.preventDefault();
@@ -65,6 +68,9 @@ const ProductListTable = () => {
 
     setProductItems(newProductItems);
   };
+
+  const handleModalOpen = () => setModalOpen(true);
+  const handleModalClose = () => setModalOpen(false);
   return (
     <TableContainer
       component={Paper}
@@ -79,7 +85,9 @@ const ProductListTable = () => {
         <TableHead>
           <TableRow>
             {headers.map((header, index) => (
-              <StyledTableCell key={index}>{header}</StyledTableCell>
+              <StyledTableCell key={index} align={index === 5 ? "right" : ""}>
+                {header}
+              </StyledTableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -91,21 +99,28 @@ const ProductListTable = () => {
               <TableCell>{product.price}</TableCell>
               <TableCell>{product.quantity}</TableCell>
               <TableCell>{product.quantity * product.price}</TableCell>
-              <TableCell align="right">
-                <Box sx={{ display: "flex" }}>
-                  {product.status && (
-                    <Button
-                      color={product.status}
-                      variant="contained"
-                      sx={{ borderRadius: 50, flexShrink: 1, width: "40%" }}
-                    >
-                      {product.status === "success"
-                        ? "Approved"
-                        : product.status === "error"
-                        ? "Missing"
-                        : ""}
-                    </Button>
-                  )}
+              <TableCell>
+                {product.status && (
+                  <Button
+                    color={product.status}
+                    variant="contained"
+                    sx={{ borderRadius: 50, flexShrink: 1, width: "40%" }}
+                  >
+                    {product.status === "success"
+                      ? "Approved"
+                      : product.status === "error"
+                      ? "Missing"
+                      : ""}
+                  </Button>
+                )}
+              </TableCell>
+              <TableCell align="right" sx={{ backgroundColor: "lightgray" }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "end",
+                  }}
+                >
                   <IconButton>
                     <CheckOutlinedIcon
                       onClick={(e) => handleCheckButtonClick(e, index)}
@@ -120,8 +135,18 @@ const ProductListTable = () => {
                       color={product.status === "error" ? "error" : "inherit"}
                     />
                   </IconButton>
-                  <Button color="inherit">Edit</Button>
+                  <Button color="inherit" onClick={handleModalOpen}>
+                    Edit
+                  </Button>
                 </Box>
+                <ProductEditModal
+                  open={modalOpen}
+                  handleClose={handleModalClose}
+                  description={product.description}
+                  name={product.name}
+                  price={product.price}
+                  quantity={product.quantity}
+                />
               </TableCell>
             </TableRow>
           ))}
