@@ -7,10 +7,9 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import IconButton from "@mui/material/IconButton";
-import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
 
-import { FormControl, Grid, Typography } from "@mui/material";
+
+import { Grid, Typography } from "@mui/material";
 
 const ProductEditModal = ({
   open,
